@@ -45,8 +45,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\leaderBoard_UnitySample.cs" />
- <Reference Include="App42_UNITY_SDK_1.0">
- <HintPath>Assets\App42_UNITY_SDK_1.0.dll</HintPath>
+ <Reference Include="App42_UNITY_API">
+ <HintPath>Assets\App42_UNITY_API.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -118,7 +118,8 @@ public class leaderBoard_UnitySample : MonoBehaviour{
 				else if(appErrorCode == 1401){
 					box = "Exception Occurred :"+ nxtLine +
 						  "Client Is Not authorized"+ nxtLine +
-							"Please Verify Your API_KEY & SECRET_KEY"+ nxtLine +
+							"Please Verify Your" + nxtLine + 
+							"API_KEY & SECRET_KEY"+ nxtLine +
 							"From AppHq.";
 					// handle here for Client is not authorized
 				}
@@ -127,10 +128,11 @@ public class leaderBoard_UnitySample : MonoBehaviour{
 						  "WE ARE SORRY !!"+ nxtLine +
 							"But Somthing Went Wrong.";
 					// handle here for Internal Server Error
-				}
+				}else{
+						 errorLable = "Exception Occurred :" + e.Message;
+            	}
 				 App42Log.Debug("Message : " + e.Message);	
-				 errorLable = "Exception Occurred :" + e.Message;
-            }
+			}
 
         }
 		
@@ -217,9 +219,9 @@ public class leaderBoard_UnitySample : MonoBehaviour{
 				// Max must be greater than ZERO.
 				else
 				{
-                App42Log.Debug("Message : " + e.Message);	
                 errorLable = "Exception Occurred :" + e.Message;
 				}
+				App42Log.Debug("Message : " + e.Message);	
 				}
 
         }
