@@ -42,9 +42,7 @@ public class leaderBoard_UnitySample : MonoBehaviour{
 	
 	void OnGUI()
     {
-		sp.SetBaseURL("http://", "localhost", 8082);
-		
-        var nxtLine = System.Environment.NewLine; //Use this whenever i need to print something On Next Line.
+		var nxtLine = System.Environment.NewLine; //Use this whenever i need to print something On Next Line.
 		
 		// For Setting Up ResponseBox.
 		GUI.Box(new Rect(450,40,250,175), box);
