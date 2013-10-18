@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
 using com.shephertz.app42.paas.sdk.csharp;
 using com.shephertz.app42.paas.sdk.csharp.game;
 
@@ -23,7 +24,7 @@ using com.shephertz.app42.paas.sdk.csharp.game;
 public class leaderBoard_UnitySample : MonoBehaviour{
     static ServiceAPI sp = new ServiceAPI("YOUR_API_KEY", "YOUR_SECRET_KEY");
     ScoreBoardService scoreBoardService = null; // Initialising ScoreBoard Service.
- 	public string gameName = "SampleGame"; //GameName Created In AppHq Console.
+ 	public static string gameName = "UnityGame"; //GameName Created In AppHq Console.
 	public string success, columnName, rankersBox, saveBox, txt_user, errorLable, box, txt_score, playerScore, playerName, playerRank;
 	public int txt_max;
 	
@@ -36,12 +37,11 @@ public class leaderBoard_UnitySample : MonoBehaviour{
 	// Use this for initialization
 	void Start () 
 	{
-	 
 	 ServicePointManager.ServerCertificateValidationCallback = Validator;
 	}
 	
 	void OnGUI()
-    {
+    {   
 		var nxtLine = System.Environment.NewLine; //Use this whenever i need to print something On Next Line.
 		
 		// For Setting Up ResponseBox.
@@ -61,7 +61,8 @@ public class leaderBoard_UnitySample : MonoBehaviour{
 		GUI.Label(new Rect(20, 40, 200, 20),"User Name");
 		txt_user = GUI.TextField(new Rect(100, 40, 200, 20), txt_user);
 		GUI.Label(new Rect(20, 70, 200, 20),"Score");
-		txt_score = GUI.TextField(new Rect(100, 70, 200, 20), txt_score);
+		txt_score = GUI.TextField(new Rect(100, 70, 200, 20), txt_score,4);
+		txt_score = Regex.Replace(txt_score, @"[^0-9]", "");
 		
         if (GUI.Button(new Rect(100, 100, 200, 50), "Save User Score"))
         {
@@ -74,6 +75,11 @@ public class leaderBoard_UnitySample : MonoBehaviour{
 			    columnName  = "";
 			    errorLable  = "";
 			
+			if(txt_user == null || txt_user.Equals("") )
+			{
+				box = "User Name Can Not Be Blank: ";
+				return;
+			}
 			string userName = txt_user;  // Name Of The USER Who Wants To Save Score.
             if(txt_score == null || txt_score.Equals("") )
 			{
@@ -129,7 +135,7 @@ public class leaderBoard_UnitySample : MonoBehaviour{
 				}else{
 						 errorLable = "Exception Occurred :" + e.Message;
             	}
-				 App42Log.Debug("Message : " + e.Message);	
+				 App42Log.Console("Message : " + e.Message);	
 			}
 
         }
@@ -152,6 +158,12 @@ public class leaderBoard_UnitySample : MonoBehaviour{
 				playerScore = "";
 				box         = "";
 				errorLable  = "";
+			
+			if(txt_max == 0)
+			{
+				box = "Max Must Be Greater Than Zero: ";
+				return;
+			}
 			
 			scoreBoardService = sp.BuildScoreBoardService(); // Initializing scoreBoardService.
             int max = txt_max;	// Maximum Number Of TOP RANKERS.
@@ -219,7 +231,7 @@ public class leaderBoard_UnitySample : MonoBehaviour{
 				{
                 errorLable = "Exception Occurred :" + e.Message;
 				}
-				App42Log.Debug("Message : " + e.Message);	
+				App42Log.Console("Message : " + e.Message);	
 				}
 
         }
