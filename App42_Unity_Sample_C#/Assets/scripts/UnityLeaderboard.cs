@@ -4,8 +4,6 @@ using UnityEngine.SocialPlatforms;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using com.shephertz.app42.paas.sdk.csharp;
 using com.shephertz.app42.paas.sdk.csharp.game;
@@ -19,11 +17,9 @@ using com.shephertz.app42.paas.sdk.csharp.game;
  *Create game with App42 by clicking on Add Game button from right tab in AppHQ.
  */
 
-
-
-public class LeaderBoard_UnitySample : MonoBehaviour, App42CallBack
+public class UnityLeaderboard : MonoBehaviour, App42CallBack
 {
-	static ServiceAPI sp = null;
+	//static ServiceAPI sp = null;
 	ScoreBoardService scoreBoardService = null; // Initialising ScoreBoard Service.
 	Constants cons = new Constants ();
 	public string success, columnName, rankersBox, saveBox, txt_user, errorLable, box, txt_score, playerScore, playerName, playerRank;
@@ -39,19 +35,24 @@ public class LeaderBoard_UnitySample : MonoBehaviour, App42CallBack
 		#if UNITY_EDITOR
 		ServicePointManager.ServerCertificateValidationCallback = Validator;
 		#endif
-		sp = new ServiceAPI (cons.apiKey, cons.secretKey);
+		//sp = new ServiceAPI (cons.apiKey, cons.secretKey);
+		App42API.Initialize(cons.apiKey, cons.secretKey);
 	}
 	
 	void OnGUI ()
 	{   
 		// For Setting Up ResponseBox.
 		GUI.Box (new Rect (450, 40, 250, 175), box);
-		GUI.Label (new Rect (470, 50, 1000, 2000), columnName);
-		GUI.Label (new Rect (470, 70, 1000, 2000), success);
-		GUI.Label (new Rect (470, 70, 1000, 2000), playerRank);
-		GUI.Label (new Rect (540, 70, 1000, 2000), playerName);
-		GUI.Label (new Rect (620, 70, 1000, 2000), playerScore);
-		
+		GUI.Label (new Rect (470, 50, 200, 200), columnName);
+		GUI.Label (new Rect (470, 70, 200, 200), success);
+		GUI.Label (new Rect (470, 70, 200, 200), playerRank);
+		GUI.Label (new Rect (540, 70, 200, 200), playerName);
+		GUI.Label (new Rect (620, 70, 200, 200), playerScore);
+
+		if (GUI.Button (new Rect (470, 250, 200, 50), "QUIT")) {
+			Application.Quit();
+		}
+
 		// Label For EXCEPTION Message .
 		GUI.Label (new Rect (250, 250, 700, 400), errorLable);
 		
@@ -85,7 +86,7 @@ public class LeaderBoard_UnitySample : MonoBehaviour, App42CallBack
 			}
 			double score = double.Parse (txt_score);		// Value Of The Score.
 			
-			scoreBoardService = sp.BuildScoreBoardService (); // Initializing scoreBoardService.
+			scoreBoardService = App42API.BuildScoreBoardService (); // Initializing scoreBoardService.
 			//Saving User Score , By Using App42 Scoreboard Service.
 			//Method Name->SaveUserScore(gameName, userName, score);
 			//Param->gameName(Name Of The Game, Which Is Created By You In AppHQ.)
@@ -119,7 +120,7 @@ public class LeaderBoard_UnitySample : MonoBehaviour, App42CallBack
 				return;
 			}
 			
-			scoreBoardService = sp.BuildScoreBoardService (); // Initializing scoreBoardService.
+			scoreBoardService = App42API.BuildScoreBoardService (); // Initializing scoreBoardService.
 			int max = txt_max;	// Maximum Number Of TOP RANKERS.
 			
 			//Getting Top Scorers , By Using App42 Scoreboard Service.
@@ -201,9 +202,10 @@ public class LeaderBoard_UnitySample : MonoBehaviour, App42CallBack
 					"But Somthing Went Wrong.";
 			// handle here for Internal Server Error
 		} else {
-			errorLable = "Exception Occurred :" + exception.GetMessage ();
+			errorLable = "Exception Occurred :" + exception;
+			//errorLable = "Exception Occurred :" + exception.GetMessage ();
 		}
-		App42Log.Console ("Message : " + exception.GetMessage ());	
+		App42Log.Console ("Message : " + e);	
+		//App42Log.Console ("Message : " + exception.GetMessage ());	
 	}
-	
 }
